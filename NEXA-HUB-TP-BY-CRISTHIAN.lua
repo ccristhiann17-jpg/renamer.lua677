@@ -1,5 +1,5 @@
 -- NEXA HUB TP by cristhian
--- WindUI Teleport Script con cooldown
+-- WindUI con mensaje que se quita después de 60 segundos
 
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
 
@@ -19,28 +19,34 @@ local MainSection = MainTab:Section({
     Title = "Etapas TP",
 })
 
-local cooldowns = {} -- Para manejar cooldown por etapa si quieres
-
 local function TeleportTo(x, y, z, etapa)
     local player = game.Players.LocalPlayer
     if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
         
         player.Character.HumanoidRootPart.CFrame = CFrame.new(x, y, z)
         
-        -- Mensaje principal
+        -- Confirmación de TP
         WindUI:Notify({
             Title = "Teleported a Etapa " .. etapa,
             Content = "✅ Has sido teletransportado correctamente.",
             Duration = 4,
         })
         
-        -- Mensaje de espera
-        task.wait(1) -- Pequeña pausa para que se vea secuencial
-        WindUI:Notify({
+        -- Mensaje de espera (60 segundos)
+        local waitNotify = WindUI:Notify({
             Title = "⏳ Espera requerida",
-            Content = "Debes esperar 45 segundos para agarrar las wins.",
-            Duration = 6,
+            Content = "Debes esperar 60 segundos para agarrar las wins.",
+            Duration = 60,  -- Se mantiene visible 60 segundos
         })
+        
+        -- Mensaje cuando termine el tiempo
+        task.delay(60, function()
+            WindUI:Notify({
+                Title = "✅ Tiempo terminado",
+                Content = "Ya puedes agarrar las wins.",
+                Duration = 5,
+            })
+        end)
         
     else
         WindUI:Notify({
@@ -91,6 +97,6 @@ MainSection:Button({
 -- Notificación inicial
 Window:Notify({
     Title = "NEXA HUB TP",
-    Content = "Bienvenido! Usa los botones para teletransportarte.\nRecuerda esperar 45 segundos después de cada TP.",
-    Duration = 7,
+    Content = "Bienvenido!\nDespués de cada TP aparecerá un mensaje que se quitará automáticamente tras 60 segundos.",
+    Duration = 8,
 })
